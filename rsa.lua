@@ -2,6 +2,8 @@ local rsa = require("rsaFunctions")
 math.randomseed(os.time())
 math.random() math.random() math.random()
 
+local RSA = {}
+
 local function generatePrimes(bitLen)
 	assert(bitLen<32, "Maximum bit length for lua's integers must be below 32, a safe number would be 16.")
 	n = math.floor(bitLen*math.log10(2))
@@ -12,7 +14,7 @@ local function generatePrimes(bitLen)
 	return possiblePrime
 end
 
-local function generateKeys(bitLen)
+function RSA.generateKeys(bitLen)
 	p = generatePrimes(bitLen)
 	q = 0
 	repeat 
@@ -40,17 +42,12 @@ local function generateKeys(bitLen)
 	return e, n, d
 end
 
-local function encyrpt(message, e, n)
+function RSA.encyrpt(message, e, n)
 	return rsa.fastModExp(message, e, n)
 end
 
-local function decrypt(crypt, d, n)
+function RSA.decrypt(crypt, d, n)
 	return rsa.fastModExp(crypt, d, n)
 end
 
-e, n, d = generateKeys(16)
-print(e, n, d)
-c = encyrpt(7, e, n)
-print(c)
-m = decrypt(c, d, n)
-print(m)
+return RSA

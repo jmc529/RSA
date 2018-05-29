@@ -5,7 +5,7 @@ math.random() math.random() math.random()
 local RSA = {}
 
 local function generatePrimes(bitLen)
-	assert(bitLen<32, "Maximum bit length for lua's integers must be below 32, a safe number would be 16.")
+	assert(bitLen<17, "Maximum bit length is 16.")
 	n = math.floor(bitLen*math.log10(2))
 	possiblePrime = 0
 	repeat

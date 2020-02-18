@@ -1,1 +1,1 @@
-This repository holds an implmentation of the RSA algorithm using [LUA](https://www.lua.org). Since Lua doesn't use arbitrary-precision numbers, it is an extremely limited implementation. 
+This repository holds an implmentation of the RSA cryptosystem using [LUA](https://www.lua.org) and [Python](https://www.python.org). Since Lua doesn't use arbitrary-precision numbers, it is an extremely limited implementation. 

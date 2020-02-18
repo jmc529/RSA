@@ -95,7 +95,7 @@ end
 function rsaFunctions.egcd(a, b)
   local x,y, u,v, q,r, m,n = 0,1, 1,0
   while a~=0 do 
-    q,r = b//a, b%a
+    q,r = math.floor(b/a), b%a
     m,n = x-(u*q), y-(v*q)
     b,a, x,y, u,v = a,r, u,v, m,n
   end

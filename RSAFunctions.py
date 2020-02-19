@@ -1,4 +1,29 @@
-import decoder
+import secrets
+import random
+import math
+
+
+# decompose n-1 as (2^s)*d
+def decompose(negative_one):
+    exponent, remainder = 0, negative_one
+    while (remainder % 2) == 0:
+        exponent = exponent+1
+        remainder = remainder//2
+
+    return exponent, remainder
+
+
+def isNotWitness(n, possible_witness, exponent, remainder):
+    witness = fastModExp(possible_witness, remainder, n)
+
+    if (witness == 1) or (witness == n - 1):
+        return False
+
+    for _ in range(exponent-1):
+        witness = fastModExp(witness, 2, n)
+        if witness == (n - 1):
+            return False
+    return True
 
 
 def egcd(a, b):
@@ -10,16 +35,27 @@ def egcd(a, b):
     return b, x, y
 
 
-def readFile():
-    rsaFile = open("StinsonRSA.txt", "r")
-    encodedWords = []
-    for line in rsaFile:
-        encodedWords.extend(line.split())
-    return encodedWords
+# Miller-Rabin
+def isProbablyPrime(n, accuracy):
+    if n <= 3:
+        return n == 2 or n == 3
+    if (n % 2) == 0:
+        return False
+
+    exponent, remainder = decompose(n - 1)
+
+    # checks if it is composite
+    for i in range(accuracy):
+        witness = random.randrange(2, n-2)
+        if isNotWitness(n, witness, exponent, remainder):
+            return False
+
+    # probably prime
+    return True
 
 
 def fastModExp(num, exp, mod):
-    exp = str(bin(exp).replace("0b", ""))
+    exp = str(bin(int(exp)).replace("0b", ""))
     result = 1
 
     for ch in exp:
@@ -27,18 +63,3 @@ def fastModExp(num, exp, mod):
         if ch == "1":
             result = (result*num) % mod
     return result
-
-
-def solveFour():
-    P = 173
-    Q = 181
-    N = P * Q
-    totient = (P-1) * (Q-1)
-    encodedWords = readFile()
-    gcd, X, Y = egcd(4913, totient)
-    for word in encodedWords:
-        decrypted = fastModExp(int(word), X, N)
-        print(decoder.decode(decrypted, 3))
-
-print(fastModExp(10, 45, 91))
-
